@@ -57,6 +57,7 @@ public class App implements EntryPoint {
 		stocksFlexTable.setText(0, 3, "Remove");
 
 		// Add styles to elements in the stock list table.
+		stocksFlexTable.setCellPadding(6);
 		stocksFlexTable.getRowFormatter().addStyleName(0, "watchListHeader");
 		stocksFlexTable.addStyleName("watchList");
 		stocksFlexTable.getCellFormatter().addStyleName(0, 1, "watchListNumericColumn");
@@ -119,6 +120,7 @@ public class App implements EntryPoint {
 	 * newSymbolTextBox.
 	 */
 	private void addStock() {
+
 		final String symbol = newSymbolTextBox.getText().toUpperCase();
 		newSymbolTextBox.setFocus(true);
 
@@ -140,6 +142,7 @@ public class App implements EntryPoint {
 		int row = stocksFlexTable.getRowCount();
 		stocks.add(symbol);
 		stocksFlexTable.setText(row, 0, symbol);
+		stocksFlexTable.setWidget(row, 2, new Label());
 		stocksFlexTable.getCellFormatter().addStyleName(row, 1, "watchListNumericColumn");
 		stocksFlexTable.getCellFormatter().addStyleName(row, 2, "watchListNumericColumn");
 		stocksFlexTable.getCellFormatter().addStyleName(row, 3, "watchListRemoveColumn");
@@ -217,7 +220,17 @@ public class App implements EntryPoint {
    
 		// Populate the Price and Change fields with new data.
 		stocksFlexTable.setText(row, 1, priceText);
-		stocksFlexTable.setText(row, 2, changeText + " (" + changePercentText
-			+ "%)");
+		Label changeWidget = (Label)stocksFlexTable.getWidget(row, 2);
+		changeWidget.setText(changeText + " (" + changePercentText + "%)");
+
+		// Change the color of text in the Change field based on its value.
+		String changeStyleName = "noChange";
+		if (price.getChangePercent() < -0.1f) {
+			changeStyleName = "negativeChange";
+		} else if (price.getChangePercent() > 0.1f) {
+			changeStyleName = "positiveChange";
+		}
+
+		changeWidget.setStyleName(changeStyleName);
 	}
 }
