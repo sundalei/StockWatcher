@@ -8,17 +8,29 @@
     <servlet-name>greetServlet</servlet-name>
     <servlet-class>com.google.gwt.sample.stockwatcher.GreetingServiceImpl</servlet-class>
   </servlet>
+  <!--
   <servlet>
     <servlet-name>stockPriceService</servlet-name>
     <servlet-class>com.google.gwt.sample.stockwatcher.StockPriceServiceImpl</servlet-class>
+  </servlet>
+  -->
+  <servlet>
+    <servlet-name>jsonStockData</servlet-name>
+    <servlet-class>com.google.gwt.sample.stockwatcher.JsonStockData</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
     <url-pattern>/stockwatcher/greet</url-pattern>
   </servlet-mapping>
+  <!--
   <servlet-mapping>
     <servlet-name>stockPriceService</servlet-name>
+    <url-pattern>/stockwatcher/stockPrices</url-pattern>
+  </servlet-mapping>
+  -->
+  <servlet-mapping>
+    <servlet-name>jsonStockData</servlet-name>
     <url-pattern>/stockwatcher/stockPrices</url-pattern>
   </servlet-mapping>
 
