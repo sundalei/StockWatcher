@@ -5,6 +5,8 @@
   <inherits name="com.google.gwt.user.theme.clean.Clean" />-->
   <inherits name='com.google.gwt.user.theme.standard.Standard'/>
 
+  <inherits name='com.google.gwt.http.HTTP' />
+
   <source path="" />
 
   <entry-point class="com.google.gwt.sample.stockwatcher.App" />
