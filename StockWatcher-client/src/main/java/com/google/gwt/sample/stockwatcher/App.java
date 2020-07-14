@@ -15,6 +15,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
@@ -58,7 +59,7 @@ public class App implements EntryPoint {
 
 	private Label errorMsgLabel = new Label();
 
-	private static final String JSON_URL = GWT.getModuleBaseURL() + "stockPrices?q=";
+	private static final String JSON_URL = "http://localhost:9000/?q=";
 
 	/**
 	 * Entry point method.
@@ -207,28 +208,23 @@ public class App implements EntryPoint {
 
 		url = URL.encode(url);
 
-		// Send request to server and handle errors.
-		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
-		try {
-			Request request = builder.sendRequest(null, new RequestCallback() {
+		JsonpRequestBuilder builder = new JsonpRequestBuilder();
+		builder.requestObject(url, new AsyncCallback<JsArray<StockData>> () {
 
-				@Override
-				public void onResponseReceived(Request request, Response response) {
-					if (200 == response.getStatusCode()) {
-						updateTable(JsonUtils.<JsArray<StockData>>safeEval(response.getText()));
-					} else {
-						displayError("Couldn't retrieve JSON (" + response.getStatusText() + ")");
-					}
-				}
-	
-				@Override
-				public void onError(Request request, Throwable exception) {
+			public void onFailure(Throwable caught) {
+				displayError("Couldn't retrieve JSON");
+			}
+			
+			public void onSuccess(JsArray<StockData> data) {
+				// handle JSON response
+				if (data == null) {
 					displayError("Couldn't retrieve JSON");
+					return;
 				}
-			});
-		} catch (RequestException ex) {
-			displayError("Couldn't retrieve JSON");
-		}
+				  
+				updateTable(data);
+			}
+		});
 	}
 
 	/**
